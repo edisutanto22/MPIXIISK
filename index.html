@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Media Interaktif Informatika XII — Arduino Uno</title>
+<style>
+:root{--navy:#102544;--blue:#1769aa;--cyan:#35c5dc;--green:#22a06b;--bg:#f2f6fb;--ink:#182638;--muted:#62748a;--line:#dce5ef;--card:#fff;--orange:#f59e0b}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+header{background:linear-gradient(125deg,#102544,#1769aa 70%,#168eaa);color:white;padding:24px clamp(16px,4vw,48px);position:relative;overflow:hidden}
+header:after{content:"";position:absolute;width:280px;height:280px;border:35px solid #ffffff16;border-radius:50%;right:-70px;top:-110px}
+.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:.75rem;font-weight:800;color:#a8eff7}
+h1{font-size:clamp(1.7rem,4vw,3rem);line-height:1.1;margin:.4rem 0}.sub{max-width:760px;color:#e1edf9}
+.wrap{display:grid;grid-template-columns:245px minmax(0,1fr);gap:22px;max-width:1400px;margin:22px auto;padding:0 18px}
+nav{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;height:max-content;position:sticky;top:12px}
+nav button{width:100%;border:0;background:transparent;padding:11px 12px;border-radius:10px;text-align:left;color:var(--ink);font-weight:650;cursor:pointer;margin:2px 0}
+nav button:hover,nav button.active{background:#e8f4ff;color:#125b9a}
+main{min-width:0}.panel{display:none;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(18px,3vw,32px);box-shadow:0 6px 22px #1c35500a}.panel.active{display:block}
+h2{margin-top:0;color:var(--navy);font-size:1.65rem}h3{color:#174b78;margin-bottom:.4rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}.card p{margin:.4rem 0}.muted{color:var(--muted)}.tag{display:inline-block;background:#e7f8fb;color:#086b80;border-radius:999px;padding:4px 10px;font-size:.8rem;font-weight:750}
+button,.btn{font:inherit}.primary,.secondary{border:0;border-radius:10px;padding:10px 15px;font-weight:750;cursor:pointer}.primary{background:var(--blue);color:white}.primary:hover{background:#10568e}.secondary{background:#e9f0f7;color:#183a5b}.danger{background:#fff0ee;color:#a33224}
+input,textarea,select{font:inherit;border:1px solid #cbd8e6;border-radius:9px;padding:10px;width:100%;margin:5px 0 12px;background:#fff;color:var(--ink)}textarea{min-height:90px;resize:vertical}
+label{font-weight:700;font-size:.92rem}.hero-card{background:linear-gradient(120deg,#e9f6ff,#f0fffb);border:1px solid #c9e6f4;border-radius:16px;padding:22px}
+.flow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0}.flow button{border:1px solid #b7d6ec;background:#edf8ff;color:#164d77;border-radius:12px;padding:15px 18px;font-weight:800;cursor:pointer}.arrow{font-size:1.4rem;color:#6093b9}
+.board{background:#087e64;border:8px solid #0c594d;border-radius:14px;padding:16px;color:#fff;max-width:650px;margin:12px auto;position:relative;box-shadow:0 7px 0 #073f38}
+.board-title{text-align:center;font-weight:900;letter-spacing:.06em;margin-bottom:12px}.pinrow{display:flex;justify-content:space-between;gap:5px;flex-wrap:wrap}.pin{font-size:.72rem;border:1px solid #b8e6d8;border-radius:5px;padding:5px;background:#075e50;cursor:pointer;color:white}.pin:hover{background:#13a487}.board-mid{display:flex;align-items:center;justify-content:space-around;gap:12px;min-height:100px}.chip{background:#182d37;border:3px solid #90a9a9;border-radius:7px;padding:18px 12px;text-align:center;font-size:.8rem;font-weight:800}.usb{background:#b7c2c9;color:#253644;border-radius:5px;padding:10px;font-weight:800}.led{width:28px;height:28px;background:#5a626b;border-radius:50%;border:3px solid #cbd5df;display:inline-block;vertical-align:middle;box-shadow:inset 0 0 8px #0007}.led.on{background:#ff334e;box-shadow:0 0 18px #ff334e, inset 0 0 7px #fff}
+.status{padding:9px 12px;border-radius:9px;background:#eef4f8;display:inline-block;font-weight:750}.code{background:#101c2b;color:#d6f5e9;padding:16px;border-radius:12px;overflow:auto;font: .9rem/1.6 Consolas,monospace;white-space:pre-wrap}
+.question{border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}.option{display:block;border:1px solid var(--line);padding:9px 12px;border-radius:9px;margin:7px 0;cursor:pointer}.option:has(input:checked){background:#eaf5ff;border-color:#5da3da}.feedback{padding:10px;border-radius:9px;margin-top:10px}.good{background:#e6f8ed;color:#12683a}.bad{background:#fff0ed;color:#9b3024}.progress{height:9px;background:#e1eaf2;border-radius:99px;overflow:hidden;margin:12px 0}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .25s}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.88rem}
+@media(max-width:800px){.wrap{grid-template-columns:1fr}nav{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}nav button{font-size:.88rem}.grid,.grid3{grid-template-columns:1fr}.board{padding:10px}.pin{font-size:.65rem}}
+@media print{header,nav,.no-print,footer{display:none!important}.wrap{display:block;margin:0;padding:0}.panel{display:none!important}.panel.active{display:block;border:0;box-shadow:none}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Media pembelajaran interaktif • Informatika SMA</div>
+  <h1>Sistem Komputer:<br>Single Board Controller Arduino Uno</h1>
+  <p class="sub">Kenali komponen, pahami input–proses–output, coba simulasi, dan pecahkan masalah melalui pemrograman sederhana.</p>
+</header>
+<div class="wrap">
+<nav aria-label="Navigasi pembelajaran">
+  <button class="active" data-page="home">⌂ Beranda</button>
+  <button data-page="apersepsi">💡 Apersepsi</button>
+  <button data-page="materi">📘 Materi</button>
+  <button data-page="boardpage">🔎 Kenali Arduino</button>
+  <button data-page="simulasi">⚙️ Simulasi</button>
+  <button data-page="lab">⌨️ Laboratorium Kode</button>
+  <button data-page="tantangan">🧠 Tantangan</button>
+  <button data-page="kuis">❓ Kuis Interaktif</button>
+  <button data-page="evaluasi">📝 Evaluasi</button>
+  <button data-page="proyek">🛠️ Proyek Mini</button>
+  <button data-page="refleksi">✍️ Refleksi</button>
+</nav>
+<main>
+<section class="panel active" id="home">
+  <div class="hero-card">
+    <span class="tag">KELAS XII • 2 × 45 MENIT</span>
+    <h2>Selamat datang di Laboratorium Arduino!</h2>
+    <p>Belajar bagaimana sebuah papan mikrokontroler membaca masukan, menjalankan instruksi, lalu mengendalikan keluaran.</p>
+    <label for="studentName">Nama siswa</label><input id="studentName" placeholder="Tuliskan nama Anda">
+    <label for="studentClass">Kelas</label><input id="studentClass" placeholder="Contoh: XII-1">
+    <button class="primary" onclick="startLearning()">Mulai belajar →</button>
+    <p id="welcome" class="muted" aria-live="polite"></p>
+  </div>
+  <h3>Tujuan pembelajaran</h3>
+  <div class="grid">
+    <div class="card">🎯 Menjelaskan sistem komputer dan papan pengendali berbasis mikrokontroler.</div>
+    <div class="card">🔌 Mengidentifikasi komponen serta pin penting Arduino Uno.</div>
+    <div class="card">💻 Membaca program Arduino sederhana dan memahami alurnya.</div>
+    <div class="card">🧩 Membuat rancangan solusi input–proses–output untuk masalah sehari-hari.</div>
+  </div>
+  <h3>Progress belajar</h3><div class="progress"><div id="progressbar"></div></div><p id="progressText" class="muted">0 dari 8 aktivitas ditandai selesai.</p>
+  <p class="muted">Petunjuk: gunakan menu di samping. Coba simulasi, kerjakan kuis, lalu isi refleksi.</p>
+</section>
+
+<section class="panel" id="apersepsi">
+  <h2>Apersepsi: bagaimana alat otomatis bekerja?</h2>
+  <p>Bayangkan lampu teras yang menyala saat lingkungan gelap. Sistem membutuhkan masukan, aturan pemrosesan, dan keluaran.</p>
+  <div class="flow"><button onclick="showFlow('input')">INPUT<br><small>Sensor / tombol</small></button><span class="arrow">→</span><button onclick="showFlow('process')">PROSES<br><small>Arduino menjalankan kode</small></button><span class="arrow">→</span><button onclick="showFlow('output')">OUTPUT<br><small>LED / buzzer</small></button></div>
+  <div class="card" id="flowExplain">Klik salah satu bagian diagram untuk melihat penjelasan.</div>
+  <h3>Pertanyaan pemantik</h3>
+  <p>Menurut Anda, mengapa alat otomatis tetap membutuhkan program?</p>
+  <textarea id="warmup" placeholder="Tuliskan pendapat awal Anda..."></textarea>
+  <button class="primary" onclick="markDone('apersepsi');notify('Jawaban apersepsi tersimpan selama halaman terbuka.')">Simpan jawaban</button>
+</section>
+
+<section class="panel" id="materi">
+  <h2>Materi pembelajaran</h2>
+  <div class="card"><h3>1. Sistem komputer</h3><p>Sistem komputer merupakan kesatuan komponen yang bekerja bersama untuk menerima data, memprosesnya, menyimpan bila diperlukan, dan menghasilkan informasi atau tindakan. Komponen umumnya meliputi <b>hardware</b> (perangkat keras), <b>software</b> (perangkat lunak), dan <b>brainware</b> (manusia/pengguna).</p><p>Dalam sistem kendali: <b>input → proses → output</b>. Contoh: tombol (input), program mikrokontroler (proses), LED (output).</p></div>
+  <div class="card"><h3>2. Single board controller dan mikrokontroler</h3><p>Istilah <i>single board controller</i> biasa digunakan untuk papan pengendali elektronik yang mengintegrasikan mikrokontroler dan rangkaian pendukung pada satu papan. Arduino Uno adalah papan pengembangan berbasis mikrokontroler untuk belajar elektronika dan kendali.</p><p>Jangan menyamakan Arduino Uno dengan komputer umum. Single-board computer seperti Raspberry Pi umumnya menjalankan sistem operasi lengkap, sedangkan Arduino Uno menjalankan program mikrokontroler untuk mengendalikan perangkat.</p></div>
+  <div class="card"><h3>3. Komponen dan pin Arduino Uno R3</h3><ul><li><b>ATmega328P:</b> mikrokontroler utama pada Uno R3 standar.</li><li><b>Pin digital 0–13:</b> membaca atau mengeluarkan sinyal digital; pin 0 dan 1 juga terkait komunikasi serial.</li><li><b>Pin analog A0–A5:</b> membaca tegangan analog melalui ADC.</li><li><b>Pin PWM bertanda ~:</b> menghasilkan sinyal PWM pada pin yang didukung.</li><li><b>5V, 3.3V, GND, VIN:</b> pin catu daya dan referensi ground sesuai kebutuhan rangkaian.</li><li><b>USB:</b> menghubungkan papan ke komputer untuk pemrograman dan komunikasi.</li><li><b>Jack DC, reset, osilator, LED daya:</b> membantu catu daya, memulai ulang, timing, dan indikasi daya.</li></ul><p>LED bawaan pada Uno R3 standar terhubung ke pin digital 13. Detail dapat berbeda pada varian papan lain.</p></div>
+  <div class="card"><h3>4. Struktur program Arduino</h3><p><code>setup()</code> dijalankan sekali saat program mulai atau papan di-reset. <code>loop()</code> dijalankan berulang kali. <code>pinMode()</code> mengatur fungsi pin, <code>digitalWrite()</code> mengatur keluaran digital, <code>digitalRead()</code> membaca input digital, dan <code>delay()</code> memberi jeda dalam milidetik.</p>
+  <pre class="code">const int ledPin = 13;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(ledPin, HIGH);
+  delay(1000);
+  digitalWrite(ledPin, LOW);
+  delay(1000);
+}</pre><p>Program menyalakan LED selama 1.000 ms (1 detik), mematikannya selama 1 detik, lalu mengulang proses tersebut.</p></div>
+  <button class="primary" onclick="markDone('materi');notify('Materi ditandai selesai.')">Tandai materi selesai</button>
+</section>
+
+<section class="panel" id="boardpage">
+  <h2>Kenali bagian Arduino Uno</h2>
+  <p>Klik label komponen untuk membaca fungsi singkatnya. Ilustrasi ini bersifat skematis untuk pembelajaran, bukan gambar teknik berskala.</p>
+  <div class="board">
+    <div class="board-title">ARDUINO UNO • ILUSTRASI INTERAKTIF</div>
+    <div class="pinrow" id="topPins"></div>
+    <div class="board-mid"><div class="usb">USB<br>PORT</div><div class="chip">ATmega328P<br><small>MIKROKONTROLER</small></div><div><div>LED bawaan <span class="led" id="boardLed"></span></div><div style="margin-top:10px"><button class="pin" onclick="toggleBoardLed()">Uji LED pin 13</button></div></div></div>
+    <div class="pinrow" id="bottomPins"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:14px;font-size:.75rem"><span>RESET • JACK DC</span><span>POWER • ANALOG</span></div>
+  </div>
+  <div class="card" id="pinInfo"><b>Pilih sebuah label</b><p>Informasi komponen akan muncul di sini.</p></div>
+  <button class="primary" onclick="markDone('boardpage')">Selesai mengenali komponen</button>
+</section>
+
+<section class="panel" id="simulasi">
+  <h2>Simulasi interaktif</h2>
+  <div class="card">
+    <h3>Simulasi 1 — LED berkedip</h3><p>Simulasi visual ini meniru perilaku LED pin 13. Tidak mengendalikan papan fisik.</p>
+    <div style="text-align:center;padding:12px"><span class="led" id="blinkLed"></span> <span id="blinkStatus" class="status">LED: MATI</span></div>
+    <label for="interval">Interval per keadaan: <span id="intervalValue">1000</span> ms</label><input type="range" id="interval" min="200" max="2000" step="100" value="1000" oninput="document.getElementById('intervalValue').textContent=this.value;restartBlinkIfRunning()">
+    <div class="no-print"><button class="primary" onclick="startBlink()">▶ Mulai</button> <button class="secondary" onclick="stopBlink()">■ Berhenti</button> <button class="secondary" onclick="resetBlink()">↺ Reset</button></div>
+    <p id="blinkExplain" class="muted">Tekan Mulai untuk menjalankan simulasi.</p>
+  </div>
+  <div class="grid" style="margin-top:14px">
+    <div class="card"><h3>Simulasi 2 — Tombol dan LED</h3><p>Tekan tombol virtual untuk memberikan input.</p><button class="primary" id="virtualButton" onpointerdown="buttonInput(true)" onpointerup="buttonInput(false)" onpointerleave="buttonInput(false)" ontouchstart="buttonInput(true)" ontouchend="buttonInput(false)">Tekan & tahan</button><p>Input: <span id="buttonState" class="status">LOW</span></p><p>LED: <span class="led" id="buttonLed"></span> <span id="buttonLedText">MATI</span></p><p class="muted">Model logika: tombol aktif → input HIGH → LED menyala. Rangkaian nyata perlu pengaturan pull-up/pull-down yang benar.</p></div>
+    <div class="card"><h3>Simulasi 3 — Lampu otomatis</h3><p>Ubah intensitas cahaya virtual.</p><label for="lightSlider">Intensitas cahaya: <span id="lightValue">50</span>/100</label><input id="lightSlider" type="range" min="0" max="100" value="50" oninput="updateLight()"><p>Keadaan: <b id="lightState">Terang</b></p><p>LED: <span id="lightLed" class="led"></span> <b id="lightLedText">MATI</b></p><p class="muted">Aturan model: intensitas di bawah 30 menyalakan LED; nilai 30 atau lebih mematikan LED.</p></div>
+  </div>
+  <button class="primary" style="margin-top:14px" onclick="markDone('simulasi')">Tandai simulasi selesai</button>
+</section>
+
+<section class="panel" id="lab">
+  <h2>Laboratorium kode</h2><p>Ubah kode atau pilih contoh, lalu periksa pola program. Ini bukan compiler C++ dan tidak mengunggah kode ke Arduino.</p>
+  <label for="codeEditor">Editor kode</label>
+  <textarea id="codeEditor" style="font-family:Consolas,monospace;min-height:270px" spellcheck="false">const int ledPin = 13;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(ledPin, HIGH);
+  delay(1000);
+  digitalWrite(ledPin, LOW);
+  delay(1000);
+}</textarea>
+  <button class="primary" onclick="checkCode()">Periksa kode</button> <button class="secondary" onclick="runCodeDemo()">Jalankan simulasi LED</button> <button class="secondary" onclick="resetCode()">Kembalikan kode awal</button>
+  <div id="codeResult" class="card" style="margin-top:12px" aria-live="polite">Hasil pemeriksaan akan ditampilkan di sini.</div>
+  <p class="muted">Catatan: pemeriksaan menggunakan pola teks sederhana, bukan kompilasi C++ sesungguhnya.</p>
+  <button class="primary" onclick="markDone('lab')">Selesai laboratorium kode</button>
+</section>
+
+<section class="panel" id="tantangan">
+  <h2>Tantangan berpikir komputasional</h2>
+  <div class="card"><h3>Tantangan 1 — Lampu indikator</h3><p>Rancang algoritma agar LED menyala satu detik dan mati satu detik secara berulang.</p><p><b>Input:</b> tidak ada input eksternal. <b>Proses:</b> atur output HIGH/LOW dan jeda. <b>Output:</b> LED berkedip.</p><textarea placeholder="Tuliskan urutan langkah atau pseudocode..."></textarea></div>
+  <div class="card"><h3>Tantangan 2 — Tombol kendali</h3><p>Bagaimana logika program berubah agar LED hanya menyala saat tombol ditekan?</p><textarea placeholder="Tuliskan kondisi dan tindakan yang diperlukan..."></textarea></div>
+  <div class="card"><h3>Tantangan 3 — Peringatan kondisi</h3><p>Rancang sistem yang mengaktifkan buzzer jika sensor mendeteksi kondisi berbahaya.</p><textarea placeholder="Tuliskan input, proses, output, dan aturan keputusannya..."></textarea></div>
+  <button class="primary" onclick="markDone('tantangan');notify('Tantangan ditandai selesai. Jawaban tersimpan selama halaman terbuka.')">Tandai tantangan selesai</button>
+</section>
+
+<section class="panel" id="kuis">
+  <h2>Kuis interaktif</h2><p>Jawab 10 soal berikut. Pilih satu jawaban untuk setiap soal, kemudian periksa hasil.</p>
+  <div id="quizArea"></div><button class="primary" onclick="gradeQuiz()">Periksa jawaban</button> <button class="secondary" onclick="resetQuiz()">Ulangi kuis</button>
+  <div id="quizResult" class="card" style="margin-top:14px" aria-live="polite"></div>
+</section>
+
+<section class="panel" id="evaluasi">
+  <h2>Evaluasi akhir</h2><p>Jawab lima pertanyaan. Empat pertanyaan pilihan ganda dinilai otomatis; jawaban singkat dinilai oleh guru.</p>
+  <div id="evalArea"></div><button class="primary" onclick="gradeEval()">Nilai pilihan ganda</button> <button class="secondary" onclick="window.print()">Cetak evaluasi</button>
+  <div id="evalResult" class="card" style="margin-top:14px" aria-live="polite"></div>
+</section>
+
+<section class="panel" id="proyek">
+  <h2>Proyek mini: Lampu indikator Arduino</h2>
+  <div class="hero-card"><h3>Tujuan</h3><p>Membuat LED berkedip sebagai indikator status dengan memahami rangkaian, kode, dan pengujian.</p></div>
+  <h3>Alat dan bahan</h3><ul><li>Arduino Uno dan kabel USB.</li><li>Breadboard dan kabel jumper.</li><li>LED, resistor pembatas arus yang sesuai (misalnya 220–330 Ω), dan komputer dengan Arduino IDE.</li></ul>
+  <h3>Langkah kerja</h3><ol><li>Pastikan papan tidak terhubung ke sumber daya saat merakit rangkaian eksternal.</li><li>Pasang LED eksternal secara seri dengan resistor; perhatikan polaritas LED.</li><li>Hubungkan rangkaian ke pin digital yang dipilih dan GND.</li><li>Tulis program untuk mengatur pin sebagai OUTPUT dan mengubah keadaan HIGH/LOW.</li><li>Periksa sambungan, unggah program, lalu amati hasilnya.</li><li>Catat hasil pengamatan dan jelaskan penyebab jika LED tidak menyala.</li></ol>
+  <h3>Contoh kode LED eksternal pada pin 8</h3><pre class="code">const int ledPin = 8;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(ledPin, HIGH);
+  delay(1000);
+  digitalWrite(ledPin, LOW);
+  delay(1000);
+}</pre>
+  <h3>Rubrik penilaian</h3><div class="grid"><div class="card"><b>Ketepatan rangkaian — 30%</b><p>Pin, GND, polaritas, dan resistor terpasang benar.</p></div><div class="card"><b>Program — 30%</b><p>Program benar dan sesuai tujuan.</p></div><div class="card"><b>Pengujian — 20%</b><p>Melakukan uji dan mencatat hasil.</p></div><div class="card"><b>Analisis — 20%</b><p>Menjelaskan cara kerja dan perbaikan.</p></div></div>
+  <label for="projectNote">Catatan hasil proyek</label><textarea id="projectNote" placeholder="Tuliskan hasil uji, kendala, dan perbaikan..."></textarea><button class="primary" onclick="markDone('proyek');notify('Proyek ditandai selesai.')">Tandai proyek selesai</button>
+</section>
+
+<section class="panel" id="refleksi">
+  <h2>Refleksi pembelajaran</h2>
+  <p>Gunakan pertanyaan berikut untuk mengevaluasi proses belajar Anda.</p>
+  <label for="r1">1. Konsep baru apa yang saya pahami?</label><textarea id="r1"></textarea>
+  <label for="r2">2. Komponen Arduino apa yang paling menarik bagi saya?</label><textarea id="r2"></textarea>
+  <label for="r3">3. Kesulitan apa yang saya temui?</label><textarea id="r3"></textarea>
+  <label for="r4">4. Bagaimana Arduino dapat membantu menyelesaikan masalah di sekolah?</label><textarea id="r4"></textarea>
+  <label for="r5">5. Proyek apa yang ingin saya buat berikutnya?</label><textarea id="r5"></textarea>
+  <button class="primary" onclick="copyReflection()">Salin refleksi</button> <button class="secondary" onclick="window.print()">Cetak halaman</button>
+  <p id="reflectionStatus" class="muted" aria-live="polite"></p>
+</section>
+</main>
+</div>
+<footer>Media pembelajaran Informatika SMA Kelas XII • Arduino Uno • Simulasi edukatif offline</footer>
+<script>
+const pages=[...document.querySelectorAll('.panel')], navButtons=[...document.querySelectorAll('nav button')];
+const done=new Set(); let blinkTimer=null, blinkOn=false;
+function openPage(id){pages.forEach(p=>p.classList.toggle('active',p.id===id));navButtons.forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'});}
+navButtons.forEach(b=>b.addEventListener('click',()=>openPage(b.dataset.page)));
+function startLearning(){const n=document.getElementById('studentName').value.trim();if(!n){document.getElementById('welcome').textContent='Silakan isi nama terlebih dahulu.';return;}document.getElementById('welcome').textContent=`Selamat belajar, ${n}! Isilah setiap aktivitas secara berurutan.`;markDone('home');}
+function markDone(id){done.add(id);const count=Math.min(done.size,8);document.getElementById('progressbar').style.width=(count/8*100)+'%';document.getElementById('progressText').textContent=`${count} dari 8 aktivitas ditandai selesai.`;}
+function notify(s){alert(s)}
+function showFlow(which){const d={input:'INPUT: sensor atau tombol memberikan data/keadaan yang dibaca oleh sistem.',process:'PROSES: mikrokontroler menjalankan instruksi program dan menentukan tindakan.',output:'OUTPUT: hasil pemrosesan mengendalikan perangkat seperti LED, buzzer, atau motor.'};document.getElementById('flowExplain').textContent=d[which];}
+const pinDetails={
+'ATmega328P':'Mikrokontroler utama pada Arduino Uno R3 standar. Menjalankan program yang diunggah ke papan.',
+'USB':'Menghubungkan papan dengan komputer untuk pemrograman dan komunikasi serial; juga dapat memasok daya sesuai kondisi.',
+'Jack DC':'Masukan daya eksternal yang sesuai spesifikasi papan. Perhatikan rentang tegangan yang dianjurkan.',
+'Pin digital':'Pin digital dapat dikonfigurasi sebagai input atau output. Pin 0 dan 1 juga digunakan untuk komunikasi serial.',
+'Pin PWM':'Pin bertanda ~ mendukung keluaran PWM pada Uno R3 standar. PWM bukan keluaran tegangan analog sejati.',
+'Pin analog':'A0–A5 dapat membaca tegangan analog melalui ADC; rentang yang aman mengikuti spesifikasi papan.',
+'5V / 3.3V':'Pin catu daya untuk rangkaian sesuai kemampuan arus dan spesifikasi papan.',
+'GND':'Ground atau titik referensi bersama rangkaian.',
+'VIN':'Pin untuk masukan tegangan ke rangkaian regulator pada konfigurasi yang sesuai; bukan pin output 5V.',
+'RESET':'Memulai ulang program pada mikrokontroler.',
+'LED daya':'Indikator bahwa papan menerima daya.',
+'LED pin 13':'LED bawaan Uno R3 standar terhubung ke pin digital 13.'
+};
+function pinButton(name,detail){const b=document.createElement('button');b.className='pin';b.textContent=name;b.onclick=()=>{document.getElementById('pinInfo').innerHTML=`<b>${name}</b><p>${detail}</p>`};return b;}
+const top=document.getElementById('topPins'),bottom=document.getElementById('bottomPins');
+['D0 RX','D1 TX','D2','D3 ~','D4','D5 ~','D6 ~','D7'].forEach(n=>top.appendChild(pinButton(n,pinDetails[n.includes('~')?'Pin PWM':'Pin digital'])));
+['D8','D9 ~','D10 ~','D11 ~','D12','D13 LED','A0','A1','A2','A3','A4','A5'].forEach(n=>bottom.appendChild(pinButton(n,n.includes('A')?pinDetails['Pin analog']:(n.includes('~')?pinDetails['Pin PWM']:(n.includes('13')?pinDetails['LED pin 13']:pinDetails['Pin digital'])))));
+function toggleBoardLed(){document.getElementById('boardLed').classList.toggle('on')}
+function setLed(id,on){document.getElementById(id).classList.toggle('on',on)}
+function startBlink(){stopBlink();blinkOn=false;const tick=()=>{blinkOn=!blinkOn;setLed('blinkLed',blinkOn);document.getElementById('blinkStatus').textContent='LED: '+(blinkOn?'MENYALA (HIGH)':'MATI (LOW)');document.getElementById('blinkExplain').textContent=blinkOn?'digitalWrite(13, HIGH): LED menyala.':'digitalWrite(13, LOW): LED mati.';};tick();blinkTimer=setInterval(tick,Number(document.getElementById('interval').value));markDone('simulasi');}
+function stopBlink(){if(blinkTimer){clearInterval(blinkTimer);blinkTimer=null;}document.getElementById('blinkExplain').textContent='Simulasi dihentikan.'}
+function resetBlink(){stopBlink();blinkOn=false;setLed('blinkLed',false);document.getElementById('blinkStatus').textContent='LED: MATI';document.getElementById('blinkExplain').textContent='Simulasi direset.'}
+function restartBlinkIfRunning(){if(blinkTimer)startBlink()}
+function buttonInput(on){document.getElementById('buttonState').textContent=on?'HIGH':'LOW';document.getElementById('buttonLedText').textContent=on?'MENYALA':'MATI';setLed('buttonLed',on)}
+function updateLight(){const v=Number(document.getElementById('lightSlider').value),on=v<30;document.getElementById('lightValue').textContent=v;document.getElementById('lightState').textContent=on?'Gelap':'Terang';document.getElementById('lightLedText').textContent=on?'MENYALA':'MATI';setLed('lightLed',on)}
+const starterCode=`const int ledPin = 13;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(ledPin, HIGH);
+  delay(1000);
+  digitalWrite(ledPin, LOW);
+  delay(1000);
+}`;
+function resetCode(){document.getElementById('codeEditor').value=starterCode;document.getElementById('codeResult').textContent='Kode awal dipulihkan.'}
+function checkCode(){const c=document.getElementById('codeEditor').value,issues=[];if(!c.includes('void setup()'))issues.push('Bagian void setup() tidak ditemukan.');if(!c.includes('void loop()'))issues.push('Bagian void loop() tidak ditemukan.');if(!c.includes('pinMode')||!c.includes('OUTPUT'))issues.push('Periksa konfigurasi pin sebagai OUTPUT.');if(!c.includes('digitalWrite')||!c.includes('HIGH')||!c.includes('LOW'))issues.push('Periksa perintah HIGH dan LOW untuk mengendalikan LED.');if(!c.includes('delay'))issues.push('Tidak ditemukan delay(); tambahkan jeda jika ingin LED berkedip dengan interval tertentu.');document.getElementById('codeResult').innerHTML=issues.length?'<b>Perlu diperiksa:</b><ul>'+issues.map(x=>'<li>'+x+'</li>').join('')+'</ul><small>Ini pemeriksaan pola sederhana, bukan kompilasi.</small>':'<b>Struktur dasar terdeteksi.</b><p>Program tampak memiliki setup, loop, konfigurasi output, serta perintah HIGH/LOW. Periksa kembali sintaks dan unggah melalui Arduino IDE untuk pengujian nyata.</p>'}
+function runCodeDemo(){openPage('simulasi');startBlink()}
+const questions=[
+{q:'Apa fungsi utama mikrokontroler pada Arduino Uno?',o:['Menampilkan dokumen seperti komputer desktop','Menjalankan program untuk membaca input dan mengendalikan output','Menggantikan semua sensor','Menyediakan koneksi internet otomatis','Menyimpan semua file sekolah'],a:1,e:'Mikrokontroler menjalankan instruksi program dan mengolah sinyal input untuk mengendalikan output.'},
+{q:'Komponen utama Arduino Uno R3 standar adalah…',o:['ATmega328P','Intel Core i7','Raspberry Pi OS','GPU diskret','Hard disk mekanis'],a:0,e:'Arduino Uno R3 standar menggunakan mikrokontroler ATmega328P.'},
+{q:'Pin yang dapat digunakan untuk membaca tegangan analog pada Uno R3 adalah…',o:['A0–A5','HDD1–HDD6','TX0–TX5 saja','GND saja','USB saja'],a:0,e:'Pin A0 sampai A5 menyediakan masukan analog melalui ADC.'},
+{q:'Apa fungsi setup() dalam program Arduino?',o:['Berjalan terus tanpa henti','Dijalankan sekali saat program mulai atau reset','Mematikan mikrokontroler','Menghapus kode','Mengatur resolusi monitor'],a:1,e:'setup() digunakan untuk inisialisasi, misalnya mengatur pin sebagai OUTPUT.'},
+{q:'Perintah digitalWrite(13, HIGH) umumnya berarti…',o:['Membaca pin 13','Mengatur output digital pin 13 ke keadaan HIGH','Menghapus pin 13','Menunggu 13 detik','Mengubah pin menjadi analog'],a:1,e:'digitalWrite() mengatur keluaran digital pada pin yang telah dikonfigurasi sebagai output.'},
+{q:'delay(1000) memberi jeda selama…',o:['1 milidetik','10 detik','1000 detik','1 detik','100 menit'],a:3,e:'Satuan delay() adalah milidetik; 1000 ms sama dengan 1 detik.'},
+{q:'Dalam sistem input–proses–output, tombol berperan sebagai…',o:['Output','Proses','Input','Catu daya utama','Program'],a:2,e:'Tombol memberi masukan yang dibaca oleh sistem.'},
+{q:'LED eksternal umumnya perlu dipasang dengan…',o:['Resistor pembatas arus yang sesuai','Kabel USB dipotong sembarangan','Tegangan tanpa batas','Dua pin GND saja','Baterai tanpa memperhatikan polaritas'],a:0,e:'Resistor membatasi arus LED agar komponen tidak rusak.'},
+{q:'Apa perbedaan umum Arduino Uno dengan single-board computer?',o:['Arduino Uno selalu menjalankan desktop OS','Arduino Uno berfokus pada kendali berbasis mikrokontroler; SBC umumnya menjalankan OS lengkap','Tidak ada perbedaan sama sekali','Arduino Uno tidak dapat menjalankan program','SBC tidak memiliki prosesor'],a:1,e:'Arduino Uno menjalankan program mikrokontroler, sedangkan SBC umumnya memiliki kemampuan komputer umum dan OS.'},
+{q:'Program LED tidak berkedip meski LED menyala terus. Hal pertama yang logis diperiksa adalah…',o:['Menghapus browser','Memeriksa urutan HIGH/LOW dan delay dalam loop()','Mengganti nama file gambar','Mematikan monitor','Menghapus semua resistor dari rangkaian'],a:1,e:'Periksa logika program: harus ada pergantian HIGH dan LOW serta jeda yang sesuai.'}
+];
+function renderQuiz(){const root=document.getElementById('quizArea');root.innerHTML='';questions.forEach((q,i)=>{const d=document.createElement('div');d.className='question';d.innerHTML=`<b>${i+1}. ${q.q}</b>`+q.o.map((o,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}"> ${'ABCDE'[j]}. ${o}</label>`).join('')+`<div id="qfb${i}"></div>`;root.appendChild(d)})}
+function gradeQuiz(){let score=0,answered=0;questions.forEach((q,i)=>{const selected=document.querySelector(`input[name="q${i}"]:checked`),fb=document.getElementById('qfb'+i);if(selected){answered++;if(Number(selected.value)===q.a){score++;fb.className='feedback good';fb.textContent='Benar. '+q.e}else{fb.className='feedback bad';fb.textContent='Belum tepat. '+q.e}}else{fb.className='feedback bad';fb.textContent='Belum dijawab. '+q.e}});const pct=Math.round(score/questions.length*100);document.getElementById('quizResult').innerHTML=`<h3>Hasil kuis: ${score}/${questions.length} (${pct}%)</h3><p>Terjawab: ${answered} dari ${questions.length}. ${pct>=90?'Sangat Baik':pct>=80?'Baik':pct>=70?'Cukup':'Perlu Belajar Kembali'}</p>`;markDone('kuis')}
+function resetQuiz(){renderQuiz();document.getElementById('quizResult').textContent='Kuis direset. Silakan coba lagi.'}
+const evalQs=[
+{q:'Pin apa yang digunakan LED bawaan pada Arduino Uno R3 standar?',o:['Pin 3','Pin 7','Pin 13','Pin A0','Pin GND'],a:2},
+{q:'Jika delay(500) digunakan, berapa lama jedanya?',o:['0,5 detik','5 detik','50 detik','500 detik','500 menit'],a:0},
+{q:'Bagian program yang berulang adalah…',o:['setup()','loop()','include','comment','pinMode() saja'],a:1},
+{q:'Untuk membaca tombol digital, fungsi yang umum digunakan adalah…',o:['digitalWrite()','delay()','digitalRead()','analogWrite() saja','setup()'],a:2}
+];
+function renderEval(){const root=document.getElementById('evalArea');root.innerHTML='';evalQs.forEach((q,i)=>{const d=document.createElement('div');d.className='question';d.innerHTML=`<b>${i+1}. ${q.q}</b>`+q.o.map((o,j)=>`<label class="option"><input type="radio" name="e${i}" value="${j}"> ${'ABCDE'[j]}. ${o}</label>`).join('');root.appendChild(d)});const d=document.createElement('div');d.className='question';d.innerHTML='<b>5. Jelaskan rancangan sistem sederhana dengan input, proses, dan output!</b><textarea id="shortAnswer" placeholder="Jawaban singkat..."></textarea><p class="muted">Jawaban ini dinilai oleh guru dan tidak masuk ke skor otomatis.</p>';root.appendChild(d)}
+function gradeEval(){let score=0;evalQs.forEach((q,i)=>{const s=document.querySelector(`input[name="e${i}"]:checked`);if(s&&Number(s.value)===q.a)score++});const pct=Math.round(score/evalQs.length*100);document.getElementById('evalResult').innerHTML=`<h3>Skor pilihan ganda: ${score}/${evalQs.length} (${pct}%)</h3><p>${pct>=90?'Sangat Baik':pct>=80?'Baik':pct>=70?'Cukup':'Perlu Belajar Kembali'}</p><p>Jawaban nomor 5 perlu dinilai guru berdasarkan ketepatan input, proses/logika, dan output.</p>`;markDone('evaluasi')}
+function copyReflection(){const fields=['r1','r2','r3','r4','r5'];const textOut=fields.map((id,i)=>`${i+1}. ${document.getElementById(id).previousElementSibling.textContent}\n${document.getElementById(id).value}`).join('\n\n');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(textOut).then(()=>document.getElementById('reflectionStatus').textContent='Refleksi disalin.').catch(()=>fallbackCopy(textOut))}else fallbackCopy(textOut);markDone('refleksi')}
+function fallbackCopy(t){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');document.getElementById('reflectionStatus').textContent='Refleksi disalin.'}catch(e){document.getElementById('reflectionStatus').textContent='Salin teks secara manual dari kolom refleksi.'}ta.remove()}
+renderQuiz();renderEval();updateLight();
+</script>
+</body>
+</html>
